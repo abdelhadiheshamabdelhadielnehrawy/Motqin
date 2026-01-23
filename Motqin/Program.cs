@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Motqin.Data;
+
 namespace Motqin
 {
     public class Program
@@ -13,6 +16,10 @@ namespace Motqin
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //Configure DBContext with SQL
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
             var app = builder.Build();
 

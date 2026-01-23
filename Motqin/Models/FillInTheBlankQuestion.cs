@@ -1,6 +1,9 @@
-﻿namespace Motqin.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+public class FillInTheBlankQuestion : Question
 {
-    public class FillInTheBlankQuestion
-    {
-    }
+    [Required]
+    public string CorrectText { get; set; }
+
+    public bool CaseSensitive { get; set; }
 }
