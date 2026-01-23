@@ -1,0 +1,31 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+
+# Rider IDE
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+*.snupkg
+
+# EF Core Migrations
+Migrations/*.Designer.cs
+Migrations/*.resx
+
+# Logs
+*.log
+
+# OS generated files
+Thumbs.db
+.DS_Store
