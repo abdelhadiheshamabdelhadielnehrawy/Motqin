@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Motqin.Dtos.Lesson;
 using Motqin.Dtos.Subject;
+using Motqin.Enums;
 using Motqin.Services;
 
 namespace Motqin.Controllers
@@ -18,9 +19,9 @@ namespace Motqin.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SubjectReadDto>>> GetBySubjectId(string gradeLevel, string educationalStage)
+        public async Task<ActionResult<IEnumerable<SubjectReadDto>>> GetBySubjectId(string country, GradeLevel gradeLevel, EducationalStage educationalStage)
         {
-            var subjects = await subjectsService.GetAllAsync(gradeLevel, educationalStage);
+            var subjects = await subjectsService.GetAllAsync(country, gradeLevel, educationalStage);
             return Ok(subjects.Select(s => new SubjectReadDto
             {
                 SubjectID = s.SubjectID,
