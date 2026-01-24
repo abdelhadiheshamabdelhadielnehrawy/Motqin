@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Motqin.Data;
 
@@ -11,9 +12,11 @@ using Motqin.Data;
 namespace Motqin.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260124155905_changeuseridname")]
+    partial class changeuseridname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,10 +218,6 @@ namespace Motqin.Migrations
                     b.Property<int>("LessonID")
                         .HasColumnType("int");
 
-                    b.Property<string>("QuestionsCategory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
@@ -317,10 +316,6 @@ namespace Motqin.Migrations
 
                     b.Property<int>("LessonID")
                         .HasColumnType("int");
-
-                    b.Property<string>("QuestionCategory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuestionText")
                         .IsRequired()

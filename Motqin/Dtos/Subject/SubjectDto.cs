@@ -1,9 +1,8 @@
-﻿using Motqin.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Motqin.Data.DTOs
+namespace Motqin.Dtos.Subject
 {
-    public class SubjectDTO
+    public class SubjectDto
     {
         [Required]
         [StringLength(100)]

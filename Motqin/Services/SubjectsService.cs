@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Motqin.Data;
-using Motqin.Data.DTOs;
+using Motqin.Dtos.Subject;
 using Motqin.Models;
 
 namespace Motqin.Services
@@ -25,20 +25,26 @@ namespace Motqin.Services
                     .FirstOrDefaultAsync(s => s.SubjectID == id);
         }
 
-        public async Task<Subject> CreateAsync(SubjectDTO subjectDTO)
+        public async Task<Subject> CreateAsync(SubjectDto subjectDto)
         {
-            var subject = new Subject()
+            var newSubject = new Subject()
             {
-                Name = subjectDTO.Name
+                Name = subjectDto.Name,
+                Country = subjectDto.Country,
+                EducationalStage = subjectDto.EducationalStage,
+                GradeLevel = subjectDto.GradeLevel
             };
-            _context.Subjects.Add(subject);
+
+            _context.Subjects.Add(newSubject);
             await _context.SaveChangesAsync();
-            return subject;
+
+            return newSubject;
         }
 
-        public async Task<bool> UpdateAsync(Subject subject, CancellationToken ct = default)
+        public async Task<bool> UpdateAsync(Subject subject)
         {
-            var existing = await _context.Subjects.FindAsync(new object[] { subject.SubjectID }, ct);
+            // check change tracker first
+            var existing = await _context.Subjects.FindAsync(new object[] { subject.SubjectID });
             if (existing is null) return false;
 
             existing.Name = subject.Name;
@@ -47,21 +53,21 @@ namespace Motqin.Services
             existing.GradeLevel = subject.GradeLevel;
 
             _context.Subjects.Update(existing);
-            await _context.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await _context.Subjects.FindAsync(new object[] { id }, ct);
+            var existing = await _context.Subjects.FindAsync(new object[] { id });
             if (existing is null) return false;
 
             _context.Subjects.Remove(existing);
-            await _context.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> ExistsAsync(int id, CancellationToken ct = default) =>
-            await _context.Subjects.AnyAsync(s => s.SubjectID == id, ct);
+        public async Task<bool> ExistsAsync(int id) =>
+            await _context.Subjects.AnyAsync(s => s.SubjectID == id);
     }
 }

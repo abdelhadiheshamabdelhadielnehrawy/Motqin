@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Motqin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5f816813df202867f94fb7e6ff75171c6055d308")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ef44c2b962f3f2b841c8b221a3b363c40e7ef53")]
 [assembly: System.Reflection.AssemblyProductAttribute("Motqin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Motqin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
