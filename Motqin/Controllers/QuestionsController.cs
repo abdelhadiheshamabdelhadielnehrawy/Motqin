@@ -9,24 +9,24 @@ namespace Motqin.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : ControllerBase
     {
-        private readonly QuestionsService _service;
+        private readonly QuestionsService _questionsService;
 
         public QuestionsController(QuestionsService service)
         {
-            _service = service;
+            _questionsService = service;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> GetAll()
         {
-            var items = await _service.GetAllAsync();
+            var items = await _questionsService.GetAllAsync();
             return Ok(items);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Question>> GetById(int id)
         {
-            var item = await _service.GetByIdAsync(id);
+            var item = await _questionsService.GetByIdAsync(id);
             if (item is null) return NotFound();
             return Ok(item);
         }
@@ -34,7 +34,7 @@ namespace Motqin.Controllers
         [HttpGet("lesson/{lessonId:int}")]
         public async Task<ActionResult<IEnumerable<Question>>> GetByLesson(int lessonId)
         {
-            var items = await _service.GetByLessonIdAsync(lessonId);
+            var items = await _questionsService.GetByLessonIdAsync(lessonId);
             return Ok(items);
         }
 
@@ -42,7 +42,7 @@ namespace Motqin.Controllers
         public async Task<ActionResult<Question>> CreateMcq([FromBody] MultipleChoiceQuestionDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var created = await _service.CreateMultipleChoiceQuestionAsync(dto);
+            var created = await _questionsService.CreateMultipleChoiceQuestionAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.QuestionID }, created);
         }
 
@@ -50,7 +50,7 @@ namespace Motqin.Controllers
         public async Task<ActionResult<Question>> CreateFill([FromBody] FillInTheBlankQuestionDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var created = await _service.CreateFillInTheBlankQuestionAsync(dto);
+            var created = await _questionsService.CreateFillInTheBlankQuestionAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = created.QuestionID }, created);
         }
 
@@ -60,7 +60,7 @@ namespace Motqin.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (dto.QuestionID != id) return BadRequest("ID mismatch");
 
-            var updated = await _service.UpdateMultipleChoiceQuestionAsync(dto);
+            var updated = await _questionsService.UpdateMultipleChoiceQuestionAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
@@ -71,7 +71,7 @@ namespace Motqin.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (dto.QuestionID != id) return BadRequest("ID mismatch");
 
-            var updated = await _service.UpdateFillInTheBlankQuestionAsync(dto);
+            var updated = await _questionsService.UpdateFillInTheBlankQuestionAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
@@ -79,7 +79,7 @@ namespace Motqin.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
+            var deleted = await _questionsService.DeleteAsync(id);
             if (!deleted) return NotFound();
             return NoContent();
         }

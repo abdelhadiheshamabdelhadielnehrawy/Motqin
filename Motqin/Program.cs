@@ -23,6 +23,7 @@ namespace Motqin
             builder.Services.AddScoped<Services.ILessonsService, Services.LessonsService>();
             builder.Services.AddScoped<Services.SubjectsService>();
             builder.Services.AddScoped<Services.QuestionsService>();
+            builder.Services.AddScoped<Services.ISubjectsService, Services.SubjectsService>();
 
             var app = builder.Build();
 
