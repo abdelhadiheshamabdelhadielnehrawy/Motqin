@@ -23,7 +23,11 @@ namespace Motqin
             builder.Services.AddScoped<Services.IUsersService, Services.UsersService>();
             builder.Services.AddScoped<Services.ILessonsService, Services.LessonsService>();
             builder.Services.AddScoped<Services.ISubjectsService, Services.SubjectsService>();
+
             var app = builder.Build();
+
+            //Seeding after build
+            AppDbInitializer.Seed(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
