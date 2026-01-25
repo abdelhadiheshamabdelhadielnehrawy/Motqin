@@ -32,11 +32,11 @@ namespace Motqin.Controllers
             return Ok(item);
         }
 
-        [HttpGet] // chek this endpoint
-        public async Task<ActionResult<IEnumerable<SubjectDto>>> GetBySubjectId(string country, GradeLevel gradeLevel, EducationalStage educationalStage)
+        [HttpGet] // check these endpoints
+        public async Task<ActionResult<IEnumerable<SubjectDto>>> GetByGradeLevel(string country, GradeLevel gradeLevel, EducationalStage educationalStage)
         {
-            var subjects = await subjectsService.GetAllAsync(country, gradeLevel, educationalStage);
-            return Ok(subjects.Select(s => new SubjectDto
+            var subjects = await _subjectsService.GetAllAsync(country, gradeLevel, educationalStage);
+            return Ok(subjects.Select(s => new SubjectReadDto
             {
                 SubjectID = s.SubjectID,
                 Name = s.Name,
@@ -44,6 +44,15 @@ namespace Motqin.Controllers
                 EducationalStage = s.EducationalStage,
                 GradeLevel = s.GradeLevel
             }));
+        }
+
+        // New endpoint: subjects for the user's grade level
+        [HttpGet("get-subjects-by-grade-level")]
+        public async Task<IActionResult> GetSubjectsByUserGradeLevel(int userId)
+        {
+            var subjects = await _subjectsService.GetByUserGradeLevelAsync(userId);
+            if (subjects is null) return NotFound(); // user not found
+            return Ok(subjects);
         }
 
         [HttpPost]
