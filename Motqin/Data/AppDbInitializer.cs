@@ -23,8 +23,8 @@ namespace Motqin.Data
                     {
                         Name = "English",
                         Country = "Egypt",
-                        EducationalStage = "Secondary",
-                        GradeLevel = "Third Year"
+                        EducationalStage = Enums.EducationalStage.Secondary,
+                        GradeLevel = Enums.GradeLevel.Third
                     });
                     context.SaveChanges();
                 }
