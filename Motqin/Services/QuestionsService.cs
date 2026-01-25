@@ -5,7 +5,22 @@ using Motqin.Dtos.Question;
 
 namespace Motqin.Services
 {
-    public class QuestionsService
+    public interface IQuestionsService
+    {
+        Task<Question> CreateFillInTheBlankQuestionAsync(FillInTheBlankQuestionDto questionDto);
+        Task<Question> CreateMultipleChoiceQuestionAsync(MultipleChoiceQuestionDto questionDto);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
+        Task<List<Question>> GetAllAsync();
+        Task<List<Question>> GetByCategoryAndLessonIdAsync(string category, int lessonId);
+        Task<Question?> GetByIdAsync(int id);
+        Task<List<Question>> GetByLessonIdAsync(int lessonId);
+        Task<bool> UpdateAsync(Question question);
+        Task<bool> UpdateFillInTheBlankQuestionAsync(FillInTheBlankQuestionDto dto);
+        Task<bool> UpdateMultipleChoiceQuestionAsync(MultipleChoiceQuestionDto dto);
+    }
+
+    public class QuestionsService : IQuestionsService
     {
         private readonly AppDbContext _context;
 
@@ -31,7 +46,7 @@ namespace Motqin.Services
                           .AsNoTracking()
                           .ToListAsync();
         }
-            
+
         public async Task<List<Question>> GetByCategoryAndLessonIdAsync(string category, int lessonId)
         {
             return await _context.Questions

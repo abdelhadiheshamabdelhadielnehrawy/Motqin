@@ -32,7 +32,7 @@ namespace Motqin.Controllers
             return Ok(item);
         }
 
-        [HttpGet] // check these endpoints
+        [HttpGet("by-grade")] // check these endpoints
         public async Task<ActionResult<IEnumerable<SubjectDto>>> GetByGradeLevel(string country, GradeLevel gradeLevel, EducationalStage educationalStage)
         {
             var subjects = await _subjectsService.GetAllAsync(country, gradeLevel, educationalStage);
