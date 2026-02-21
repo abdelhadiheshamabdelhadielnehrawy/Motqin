@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Motqin.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,6 +20,9 @@ namespace Motqin.Models
         [Required]
         public string QuestionsCategory { get; set; }
 
+        public int RepetitionNumber { get; set; }
+
+        public StudySessionStatuses StudySessionStatuses { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public int Score { get; set; }

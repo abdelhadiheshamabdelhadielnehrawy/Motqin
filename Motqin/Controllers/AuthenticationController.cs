@@ -8,6 +8,7 @@ using Motqin.Data.Helpers;
 using Motqin.Dtos.Authentication;
 using Motqin.Enums;
 using Motqin.Models;
+using Motqin.Services;
 using SchoolApp.API.Data.Models;
 using SchoolApp.API.Data.ViewModels;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,19 +26,22 @@ namespace Motqin.Controllers
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly IEmailService _emailService;
 
 
         public AuthenticationController(UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             AppDbContext context,
             IConfiguration configuration,
-            TokenValidationParameters tokenValidationParameters)
+            TokenValidationParameters tokenValidationParameters,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             _configuration = configuration;
             _tokenValidationParameters = tokenValidationParameters;
+            _emailService = emailService;
 
         }
 
@@ -87,10 +91,59 @@ namespace Motqin.Controllers
                         break;
                 }
 
-                return Ok("User created");
+                // generate email confirmation token
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
+                // email service to send the mail, but not implemented yet 
+
+               await _emailService.SendEmailAsync(
+               newUser.Email,
+               "Confirm your email",
+                $@"
+                <h2>Welcome {newUser.UserName}!</h2>    
+                <p>Your email verification code is:</p>
+                <h3>{code}</h3>
+                <p>Please enter this code in the application to verify your email.</p>
+                ");
+
+
+
+                return Ok($"Please confirm your email with the code sent to you ");
             }
             return BadRequest("User could not be created");
         }
+
+        [HttpPost("VerifyEmailAuthority")]
+        public async Task<IActionResult> VerifyEmailAuthority(string? email, string? code) // we can make Dto
+        {
+            // 1. Validate the input payload
+            if (email == null || code == null)
+            {
+                return BadRequest(new { error = "Invalid payload" });
+            }
+
+            // 2. Find the user by the provided email
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest(new { error = "Invalid payload" });
+            }
+
+            // 3. Attempt to confirm the email using the provided code/token
+            var isVerified = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (isVerified.Succeeded)
+            {
+                return Ok(new
+                {
+                    message = "email confirmed"
+                });
+            }
+
+            // 4. Return generic error if verification fails
+            return BadRequest(new { error = "something went wrong" });
+        }
+
 
         [HttpPost("login-user")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
@@ -100,9 +153,19 @@ namespace Motqin.Controllers
                 return BadRequest("Please, provide all required fields");
             }
 
+          
+
             var userExists = await _userManager.FindByEmailAsync(loginDto.EmailAddress);
-            if (userExists != null && await _userManager.CheckPasswordAsync(userExists, loginDto.Password))
+
+            if (userExists != null && await _userManager.CheckPasswordAsync(userExists, loginDto.Password)) // guaranteed that the email is not null
+                                                                                                            // to pass it to user manager.
             {
+                
+                if (!await _userManager.IsEmailConfirmedAsync(userExists))
+                {
+                    return Unauthorized("Email is not confirmed. Please check your inbox.");
+                }
+
                 var tokenValue = await GenerateJWTTokenAsync(userExists, null);
                 return Ok(tokenValue);
             }

@@ -9,6 +9,11 @@ public abstract class Question
     [Required]
     public int LessonID { get; set; }
 
+    public int DisplayOrder { get; set; } = 0;   // for structured lesson ordering
+
+    public int Priority { get; set; } = 2;       // 1 = High, 2 = Medium, 3 = Low
+
+
     [Required]
     public string QuestionCategory { get; set; }  // Basic / Advanced
 

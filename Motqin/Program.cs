@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Motqin.Data;
 using Motqin.Models;
+using Motqin.Services;
 using System.Text;
 
 namespace Motqin
@@ -33,6 +34,10 @@ namespace Motqin
             builder.Services.AddScoped<Services.QuestionsService>();
             builder.Services.AddScoped<Services.ISubjectsService, Services.SubjectsService>();
 
+            //EmailService
+            builder.Services.AddScoped<IEmailService, SendGridEmailService>();
+
+
             var TokenValidationParameters = new TokenValidationParameters()
             {
                 ValidateIssuerSigningKey = true,
@@ -51,7 +56,14 @@ namespace Motqin
             builder.Services.AddSingleton(TokenValidationParameters); //bug fix : you must register it for the controller to use it
 
             //Add Identity
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+
+                // Email Confirmation
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            }
+            )
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 

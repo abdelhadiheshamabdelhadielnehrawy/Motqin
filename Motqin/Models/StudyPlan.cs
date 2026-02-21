@@ -17,6 +17,7 @@ namespace Motqin.Models
 
         public DateTime NextReviewDate { get; set; }
         public int ReviewInterval { get; set; }
+        public int RepetitionNumber { get; set; }
 
         [StringLength(50)]
         public string Status { get; set; }
