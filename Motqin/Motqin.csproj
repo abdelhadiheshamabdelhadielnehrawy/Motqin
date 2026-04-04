@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\SessionsFolder\**" />
+    <Content Remove="Models\SessionsFolder\**" />
+    <EmbeddedResource Remove="Models\SessionsFolder\**" />
+    <None Remove="Models\SessionsFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Dtos\Authentication\LoginDto.cs" />
   </ItemGroup>
 
